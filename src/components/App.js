@@ -1,39 +1,34 @@
- 
-import React, { useState, useMemo } from "react";
-import expensiveOperation from "../function.js";
-import "../styles/App.css";
+ import React, { useState, useMemo } from 'react'
+import '../styles/App.css';
+
+const isArmstrongNumber = (number) => {
+  console.log("Expensive calculation execution");
+  const numberOfDigits = `${number}`.length;
+  let sum = 0;
+  let temp = number;
+  while (temp > 0) {
+    let remainder = temp % 10;
+    sum += remainder ** numberOfDigits;
+    temp = parseInt(temp / 10);
+  }
+  return sum === number;
+};
 
 const App = () => {
-  return <OptimizeTheOperation />;
-};
+  const [num, setNum] = useState('');
+  const [count, setCount] = useState(1);
 
-const OptimizeTheOperation = () => {
-  const [number, setNumber] = useState(1);
-  const array = useMemo(() => expensiveOperation(number), [number]);
-
-  const submitHandler = (event) => {
-    event.preventDefault();
-    setNumber(parseInt(event.target.num.value, 10));
-  };
+  const isArmstrong = useMemo(() => isArmstrongNumber(num), [num]);
 
   return (
-    <div>
-      Enter the number:
-      <form onSubmit={submitHandler}>
-        <input id="num" defaultValue={number} />
-        <button id="submit" type="submit">
-          Click me
-        </button>
-      </form>
-      <br />
-      Result of expensive operation:
-      <ul id="result">
-        {array.map((item, index) => (
-          <li key={index}>{item}</li>
-        ))}
-      </ul>
+    <div className="App">
+      <input id='input' value={num} onChange={(e) => setNum(+e.target.value)}/>
+      <h2 id='answer'>{num ? (isArmstrong ? `${num} is armstrong` : `${num} is not armstrong`) : `Please Enter Number `}</h2>
+      <h4 id='count' onClick={() => setCount((count) => count + 1)}>
+        Click me to increase count:-  {count}
+      </h4>
     </div>
   );
-};
+}
 
 export default App;
